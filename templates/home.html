@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <!-- <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet"> -->
     <title>YouTube Downloader</title>
 </head>
@@ -16,59 +17,61 @@
         <h2>Download Youtube Video</h2>
         <div class=" form-group">
             <label>Enter Youtube URL</label>
+            <ul class="alert alert-info alert-dismissible fade show" id="success" role="alert">
+            </ul>
             <input id='link' type="text" class="form-control" required="required" name="link">
         </div>
         <button id="btn" type="submit" class="save btn btn-success">Download</button>
 
-        <h1>List</h1>
-        <!-- {% csrf_token %} -->
-        <p class="alert alert-info" id="success">
-        </p>
     </div>
-
-</body>
-
-
-<script>
-    function getCookie(name) {
-        var cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            var cookies = document.cookie.split(';');
-            for (var i = 0; i < cookies.length; i++) {
-                var cookie = cookies[i].trim();
-                // Does this cookie string begin with the name we want?
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
+    <script>
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
                 }
             }
+            return cookieValue;
         }
-        return cookieValue;
-    }
 
 
-    $(document).ready(function () {
+        $(document).ready(function () {
 
-        var csrftoken = getCookie('csrftoken');
+            var csrftoken = getCookie('csrftoken');
 
-        $(".btn").on('click', function (event) {
-            event.preventDefault();
-            $.ajax({
-                url: "{% url 'download' %}",
-                type: 'post',
-                data: {
-                    text: $("#link").val()
-                },
-                headers: {
-                    'X-CSRFToken': csrftoken,
-                },
-                success: function (response) {
-                    $("#success").append(response.data)
-                }
+            $(".btn").on('click', function () {
+                $("#success").append("Downloading....")
+                $.ajax({
+                    url: "{% url 'download' %}",
+                    type: 'post',
+                    data: {
+                        text: $("#link").val()
+                    },
+                    headers: {
+                        'X-CSRFToken': csrftoken,
+                    },
+                    success: function (response) {
+                        $("#success").append('<li>' + response.data + '</li>')
+                    }
+                })
             })
-        })
 
-    });
-</script>
+        });
+    </script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
+    </script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js">
+    </script>
+
+</body>
 
 </html>
