@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet"> -->
+    <title>YouTube Downloader</title>
+</head>
+
+<body>
+    <div class="container" style="width:50%;">
+        <h2>Download Youtube Video</h2>
+        <div class=" form-group">
+            <label>Enter Youtube URL</label>
+            <input id='link' type="text" class="form-control" required="required" name="link">
+        </div>
+        <button id="btn" type="submit" class="save btn btn-success">Download</button>
+
+        <h1>List</h1>
+        <!-- {% csrf_token %} -->
+        <p class="alert alert-info" id="success">
+        </p>
+    </div>
+
+</body>
+
+
+<script>
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+
+    $(document).ready(function () {
+
+        var csrftoken = getCookie('csrftoken');
+
+        $(".btn").on('click', function (event) {
+            event.preventDefault();
+            $.ajax({
+                url: "{% url 'download' %}",
+                type: 'post',
+                data: {
+                    text: $("#link").val()
+                },
+                headers: {
+                    'X-CSRFToken': csrftoken,
+                },
+                success: function (response) {
+                    $("#success").append(response.data)
+                }
+            })
+        })
+
+    });
+</script>
+
+</html>
