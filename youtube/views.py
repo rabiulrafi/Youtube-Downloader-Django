@@ -14,8 +14,8 @@ def home(request):
 def youtube_downloder(request):
     homedir = os.path.expanduser("~")
     dirs = homedir + "/Downloads"
-    if request.method == "POST":
-        url = request.POST.get("text")
+    if request.method == "GET":
+        url = request.GET.get("text")
         print(url)
         try:
             YouTube(url).streams.first().download(homedir + "/Downloads")

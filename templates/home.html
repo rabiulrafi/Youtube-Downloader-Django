@@ -50,7 +50,7 @@
                 $("#success").append("Downloading....")
                 $.ajax({
                     url: "{% url 'download' %}",
-                    type: 'post',
+                    type: 'get',
                     data: {
                         text: $("#link").val()
                     },
