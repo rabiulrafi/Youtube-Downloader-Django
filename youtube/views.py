@@ -18,7 +18,7 @@ def youtube_downloder(request):
         url = request.POST.get("text")
         print(url)
         try:
-            YouTube(url).streams.first().download(homedir + "/Downloads")
+            YouTube(url).streams.first().download()
             # messages.success(request, "Vedio Downloded at Download Directories")
             return JsonResponse(
                 {"data": "Vedio Downloded at Download Directories"}, status=200
